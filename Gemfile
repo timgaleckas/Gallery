@@ -1,6 +1,8 @@
-source :rubygems
+source "http://rubygems.org"
 
-# gem "dm-core"
 gem "sinatra"
 gem "haml"
-gem "thin"
+
+gem "pry"
+gem "capistrano"
+gem 'capistrano-shared-helpers'

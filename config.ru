@@ -1,7 +1,13 @@
-path = File.expand_path("../", __FILE__)
-
+require "bundler/setup"
 require 'rubygems'
 require 'sinatra'
-require "#{path}/app"
 
+set :public, File.expand_path(File.dirname(__FILE__) + '/public') # Include your public folder
+set :views, File.expand_path(File.dirname(__FILE__) + '/views')  # Include the views
+
+set :environment, :production
+
+disable :run, :reload
+
+require './app' # replace this with your sinatra app file
 run Sinatra::Application
