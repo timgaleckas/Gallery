@@ -9,7 +9,7 @@ set :user, "tim"
 set :use_sudo, false
 
 set :scm, :git
-set :repository,  "git@github.com:timgaleckas/pictures.git"
+set :repository,  "git@github.com:timgaleckas/Gallery.git"
 set :branch, 'master'
 set :git_shallow_clone, 1
 

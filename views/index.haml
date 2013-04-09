@@ -1,29 +1,29 @@
 - if params[:page].nil?
-	- pagenum = 0
+  - pagenum = 0
 - else
-	- pagenum = params[:page].to_i
+  - pagenum = params[:page].to_i
 - prevp = pagenum - 1
 - nextp = pagenum + 1
 
 .container
-	.row
-		.span12
-			#selected
-	.row
-		#photos
-			- for image in IMAGE_FILES[pagenum*99,99] do
-				.span4
-					- url = image[7,100]
-					%img{:class => "lazy", :src => "img/placehold.gif", :data => {:original => url}, :width => 300}
-	.row
-		.span12
-			.pagination.pagination-centered
-				%ul
-					- if prevp != -1
-						%li
-							%a{:href => "/#{prevp}"}
-								&larr; Prev
-					%li
-						%a{:href => "/#{nextp}"}
-							Next &rarr;
-	%div= haml :footer
+  .row
+    .span12
+      #selected
+  .row
+    #photos
+      - for image in IMAGE_FILES[pagenum*99,99] do
+        .span4
+          - url = image[7,100]
+          %img{:class => "lazy", :src => "img/placehold.gif", :data => {:original => url}, :width => 300}
+  .row
+    .span12
+      .pagination.pagination-centered
+        %ul
+          - if prevp != -1
+            %li
+              %a{:href => "/#{prevp}"}
+                &larr; Prev
+          %li
+            %a{:href => "/#{nextp}"}
+              Next &rarr;
+  %div= haml :footer
