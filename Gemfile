@@ -4,6 +4,8 @@ gem "sinatra"
 gem "haml"
 gem "sass"
 
+gem "mini_magick"
+
 gem "redis"
 
 gem "pry"

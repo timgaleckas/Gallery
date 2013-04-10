@@ -2,6 +2,7 @@ require 'sinatra'
 require 'haml'
 require 'fileutils'
 require 'redis'
+require 'mini_magick'
 
 require 'pry'
 
@@ -29,8 +30,22 @@ get '/selected/:page' do
   haml :index
 end
 
-get '/about' do
-  haml :about
+get '/resize/:dimensions/*' do |dimensions, url|
+  image = MiniMagick::Image.open("#{Dir.pwd}/public/#{url}")
+
+  image.combine_options do |command|
+    #
+    # The box filter majorly decreases processing time without much
+    # decrease in quality
+    #
+    command.filter("box")
+    command.resize(dimensions)
+  end
+  dest = "#{Dir.pwd}/public/resize/#{dimensions}/#{url}"
+  FileUtils.mkdir_p(File.dirname(dest))
+  image.write(dest)
+
+  send_file(image.path, :disposition => "inline")
 end
 
 get "/select/*" do
@@ -46,6 +61,10 @@ get "/select/*" do
     redis.set(key, true)
     "added:#{photo}"
   end
+end
+
+get '/about' do
+  haml :about
 end
 
 get '/:page' do
