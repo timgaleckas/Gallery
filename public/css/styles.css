@@ -4,5 +4,5 @@ body {
 }
 
 .selected {
-    box-shadow: 0 0 20px rgba(56, 68, 209, 0.96);
+    opacity: .2;
 }

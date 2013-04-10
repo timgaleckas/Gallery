@@ -27,23 +27,6 @@
     width: 100%;
     height: 28px;
     /* Make inputs at least the height of their button counterpart */
-<<<<<<< HEAD
-  
-    /* Makes inputs behave like true block-level elements */
-  
-    -webkit-box-sizing: border-box;
-    /* Older Webkit */
-  
-    -moz-box-sizing: border-box;
-    /* Older FF */
-  
-    -ms-box-sizing: border-box;
-    /* IE8 */
-  
-    box-sizing: border-box;
-    /* CSS3 spec*/
-  
-=======
 
     /* Makes inputs behave like true block-level elements */
 
@@ -59,7 +42,6 @@
     box-sizing: border-box;
     /* CSS3 spec*/
 
->>>>>>> 3f58f8fc8a391cdcfbeb6218cb465345bc19fca6
   }
   .input-prepend input[class*="span"], .input-append input[class*="span"] {
     width: auto;

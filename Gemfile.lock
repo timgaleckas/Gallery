@@ -9,9 +9,8 @@ GEM
       net-ssh-gateway (>= 1.1.0)
     capistrano-shared-helpers (1.0.0)
     coderay (1.0.9)
-    daemons (1.1.9)
-    eventmachine (1.0.3)
-    haml (3.1.6)
+    haml (4.0.2)
+      tilt
     highline (1.6.16)
     method_source (0.8.1)
     net-scp (1.1.0)
@@ -26,16 +25,18 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.4)
     rack (1.5.2)
+    rack-protection (1.5.0)
+      rack
+    redis (3.0.2)
     sass (3.2.7)
     shotgun (0.9)
       rack (>= 1.0)
-    sinatra (1.0)
-      rack (>= 1.0)
+    sinatra (1.4.2)
+      rack (~> 1.5, >= 1.5.2)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
     slop (3.4.4)
-    thin (1.5.1)
-      daemons (>= 1.0.9)
-      eventmachine (>= 0.12.6)
-      rack (>= 1.0.0)
+    tilt (1.3.7)
 
 PLATFORMS
   ruby
@@ -45,7 +46,7 @@ DEPENDENCIES
   capistrano-shared-helpers
   haml
   pry
+  redis
   sass
   shotgun
   sinatra
-  thin
