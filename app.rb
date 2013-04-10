@@ -30,14 +30,38 @@ end
 
 get %r{/(delete|censor|publish)(?:/(all|selected))?(?:/([^\/?#]+)(?:\.|%2E)?([^\/?#]+)?)?$} do |operation, filter, page, format|
   @filter = filter || 'all'
-  @images = case @filter
-              when 'all', nil
+  @images = case operation
+            when 'delete'
+              case @filter
+              when 'all'
                 IMAGE_URLS
               when 'selected'
                 IMAGE_URLS & redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
               when 'not_selected'
                 IMAGE_URLS - redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
               end
+            when 'censor'
+              censor_images = IMAGE_URLS - redis.keys(key_for_photo('delete', '*')).map{|key| photo_from_key('delete',key)}.sort.reverse
+              case @filter
+              when 'all'
+                censor_images
+              when 'selected'
+                censor_images & redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+              when 'not_selected'
+                censor_images - redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+              end
+            when 'publish'
+              censor_images = IMAGE_URLS - redis.keys(key_for_photo('delete', '*')).map{|key| photo_from_key('delete',key)}.sort.reverse
+              publish_images = censor_images - redis.keys(key_for_photo('censor', '*')).map{|key| photo_from_key('censor', key)}.sort.reverse
+              case @filter
+              when 'all'
+                publish_images
+              when 'selected'
+                publish_images & redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+              when 'not_selected'
+                publish_images - redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+              end
+            end
   @pagenum = page.to_i
   @operation = operation
   @prefix = "/#{operation}/#{filter}"

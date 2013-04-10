@@ -1,4 +1,4 @@
-set :shared_children, %w( public/resize )
+set :shared_children, %w( public/resize tmp )
 set :domain, "timgaleckas.dyndns-home.com"
 set :port, 8970
 set :application, "pictures"
@@ -23,6 +23,12 @@ namespace :bundle do
   task :install do
     run "cd #{current_path} && bundle install  --without=test"
     run "ln -s /mnt/NASDisk0001/Pictures /srv/www/pictures/current/public/photos"
+  end
+end
+namespace :deploy do
+  desc "Restart Application"
+  task :restart do
+    run "touch #{current_path}/tmp/restart.txt"
   end
 end
 
