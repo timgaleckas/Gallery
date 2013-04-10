@@ -1,9 +1,5 @@
-- if params[:page].nil?
-  - pagenum = 0
-- else
-  - pagenum = params[:page].to_i
-- prevp = pagenum - 1
-- nextp = pagenum + 1
+- prevp = @pagenum - 1
+- nextp = @pagenum + 1
 
 .container
   .row
@@ -11,13 +7,12 @@
       #selected
   .row
     #photos
-      - for image in @images[pagenum*99,99] || [] do
+      - for image in @images[@pagenum*99,99] || [] do
         .span4
-          - url = image.gsub(/^.*public./,'')
           %img{ |
-            :class => "lazy#{ redis.exists('image:' + url + ':selected') ? ' selected' : ''}", |
-            :src => "img/placehold.gif", |
-            :data => {:original => 'resize/300x300/' + url}, |
+            :class => "lazy#{ redis.exists(key_for_photo(@operation, image)) ? ' selected' : ''}", |
+            :src => "/img/placehold.gif", |
+            :data => {:original => '/resize/300x300/' + image, :select_url=> "/#{@operation}/select/#{image}" }, |
             :width => 300, |
             :title => url.gsub(/^photos./,'') |
           } |

@@ -1,14 +1,21 @@
 .navbar.navbar-fixed-top
-	.navbar-inner
-		.container
-			%a.btn.btn-navbar{ "data-toggle".to_sym => "collapse", "data-target".to_sym => ".nav-collapse"}
-				%span.icon-bar
-				%span.icon-bar
-				%span.icon-bar
-			%a.brand{:href => '/'} Gallery
-			.nav-collapse
-				%ul.nav
-					%li
-						%a{:href => '/'}Home
-					%li
-						%a{:href => '/about'}About
+  .navbar-inner
+    .container
+      %a.btn.btn-navbar{ "data-toggle".to_sym => "collapse", "data-target".to_sym => ".nav-collapse"}
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      %a.brand{:href => '/'} Gallery
+      %ul.nav
+        %li{:class => @operation=='delete'&&@filter=='all' ? 'active' : ''}
+          %a{:href => '/delete'}Delete Photos
+        %li{:class => @operation=='delete'&&@filter=='selected' ? 'active' : ''}
+          %a{:href => '/delete/selected'}Deleted Photos
+        %li{:class => @operation=='censor'&&@filter=='all' ? 'active' : ''}
+          %a{:href => '/censor'}Censor Photos
+        %li{:class => @operation=='censor'&&@filter=='selected' ? 'active' : ''}
+          %a{:href => '/censor/selected'}Censored Photos
+        %li{:class => @operation=='publish'&&@filter=='all' ? 'active' : ''}
+          %a{:href => '/publish'}Publish Photos
+        %li{:class => @operation=='publish'&&@filter=='selected' ? 'active' : ''}
+          %a{:href => '/publish/selected'}Published Photos

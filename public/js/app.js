@@ -1,7 +1,11 @@
 $("#photos img").click(function(event) {
-    var image = $(this).attr("src");
-    $(this).toggleClass("selected");
-    $.get('/select/'+image, function(data) {
-        //$('#selected').append(data);
-    });
+  var image = $(this);
+  $.get(image.data('select-url'), function(data) {
+    if(data.split(':')[0] == 'removed'){
+      image.removeClass("selected");
+    }
+    if(data.split(':')[0] == 'added'){
+      image.addClass("selected");
+    }
+  });
 });
