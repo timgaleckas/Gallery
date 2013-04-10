@@ -18,7 +18,8 @@
             :class => "lazy#{ redis.exists('image:' + url + ':selected') ? ' selected' : ''}", |
             :src => "img/placehold.gif", |
             :data => {:original => 'resize/300x300/' + url}, |
-            :width => 300 |
+            :width => 300, |
+            :title => url.gsub(/^photos./,'') |
           } |
   .row
     .span12
