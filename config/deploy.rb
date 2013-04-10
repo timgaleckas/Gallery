@@ -1,5 +1,4 @@
-require 'capistrano-shared-helpers'
-
+set :shared_children, %w( public/resize )
 set :domain, "timgaleckas.dyndns-home.com"
 set :port, 8970
 set :application, "pictures"
