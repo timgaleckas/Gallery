@@ -11,4 +11,3 @@ gem "redis"
 gem "pry"
 gem "shotgun"
 gem "capistrano"
-gem 'capistrano-shared-helpers'

@@ -7,7 +7,6 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
-    capistrano-shared-helpers (1.0.0)
     coderay (1.0.9)
     haml (4.0.2)
       tilt
@@ -29,7 +28,7 @@ GEM
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
-    redis (3.0.2)
+    redis (3.0.3)
     sass (3.2.7)
     shotgun (0.9)
       rack (>= 1.0)
@@ -46,7 +45,6 @@ PLATFORMS
 
 DEPENDENCIES
   capistrano
-  capistrano-shared-helpers
   haml
   mini_magick
   pry
