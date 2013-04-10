@@ -23,6 +23,7 @@ namespace :bundle do
   desc "run bundle install and ensure all gem requirements are met"
   task :install do
     run "cd #{current_path} && bundle install  --without=test"
+    run "ln -s /mnt/NASDisk0001/Pictures /srv/www/pictures/current/public/photos"
   end
 end
 

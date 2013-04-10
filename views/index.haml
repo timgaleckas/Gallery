@@ -11,7 +11,7 @@
       #selected
   .row
     #photos
-      - for image in IMAGE_FILES[pagenum*99,99] do
+      - for image in @images[pagenum*99,99] || [] do
         .span4
           - url = image.gsub(/^.*public./,'')
           %img{ |

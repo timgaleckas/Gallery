@@ -13,6 +13,12 @@ def redis
 end
 
 get '/' do
+  @images = IMAGE_FILES
+  haml :index
+end
+
+get '/deleted' do
+  @images = redis.keys('image:*:selected').map{|i|i.gsub('image:','').gsub(':selected','')}.sort.reverse
   haml :index
 end
 
