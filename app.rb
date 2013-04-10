@@ -17,15 +17,15 @@ get '/' do
   haml :index
 end
 
-get '/deleted' do
+get '/selected' do
   @images = redis.keys('image:*:selected').map{|i|i.gsub('image:','').gsub(':selected','')}.sort.reverse
-  @prefix = '/deleted'
+  @prefix = '/selected'
   haml :index
 end
 
-get '/deleted/:page' do
+get '/selected/:page' do
   @images = redis.keys('image:*:selected').map{|i|i.gsub('image:','').gsub(':selected','')}.sort.reverse
-  @prefix = '/deleted'
+  @prefix = '/selected'
   haml :index
 end
 
