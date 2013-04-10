@@ -19,6 +19,13 @@ end
 
 get '/deleted' do
   @images = redis.keys('image:*:selected').map{|i|i.gsub('image:','').gsub(':selected','')}.sort.reverse
+  @prefix = '/deleted'
+  haml :index
+end
+
+get '/deleted/:page' do
+  @images = redis.keys('image:*:selected').map{|i|i.gsub('image:','').gsub(':selected','')}.sort.reverse
+  @prefix = '/deleted'
   haml :index
 end
 
@@ -42,5 +49,6 @@ get "/select/*" do
 end
 
 get '/:page' do
+  @images = IMAGE_FILES
   haml :index
 end

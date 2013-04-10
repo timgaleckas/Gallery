@@ -17,7 +17,7 @@
           %img{ |
             :class => "lazy#{ redis.exists('image:' + url + ':selected') ? ' selected' : ''}", |
             :src => "img/placehold.gif", |
-            :data => {:original => url}, |
+            :data => {:original => '/' + url}, |
             :width => 300 |
           } |
   .row
@@ -26,9 +26,9 @@
         %ul
           - if prevp != -1
             %li
-              %a{:href => "/#{prevp}"}
+              %a{:href => "#{@prefix}/#{prevp}"}
                 &larr; Prev
           %li
-            %a{:href => "/#{nextp}"}
+            %a{:href => "#{@prefix}/#{nextp}"}
               Next &rarr;
   %div= haml :footer
