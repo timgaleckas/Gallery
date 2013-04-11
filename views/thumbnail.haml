@@ -1,9 +1,17 @@
-.thumbnail
-  %img{ |
-    :class => "lazy#{ selected?(@operation, image) ? ' selected' : ''}", |
-    :src => "/img/placehold.gif", |
-    :data => {:original => '/resize/300x300/' + image, :select_url=> "/#{@operation}/select/#{image}" }, |
-    :width => 300, |
-    :title => image.gsub(/^photos./,'') |
-  } |
-  .title= image.gsub(/^photos./,'')
+.thumb-container{ data: { image: image } }
+  .header
+    %a.btn.btn-danger.thumb-delete
+      %i.icon-remove.icon-white
+    %a.btn.btn-warning.thumb-censor
+      %i.icon-lock.icon-white
+    %a.btn.btn-success.thumb-publish
+      %i.icon-share-alt.icon-white
+  .nono
+    %a.thumbnail{ href: '/photos/' + image, title: image, data: { gallery: 'gallery' } }
+      %img.lazy{ |
+        :src => "/img/placehold.gif", |
+        :data => {:original => '/resize/300x300/' + image, :select_url=> "/#{@operation}/select/#{image}" }, |
+        :width => 300, |
+        :title => image.gsub(/^photos./,'') |
+      } |
+      .title= image.gsub(/^photos./,'')

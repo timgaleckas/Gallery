@@ -6,3 +6,14 @@ body {
 img.selected {
   opacity: .2;
 }
+
+div.thumb-container div.header {
+  position: absolute
+}
+
+.thumb-container:hover .header {
+  display: inline
+}
+.thumb-container .header {
+  display: none
+}

@@ -7,15 +7,11 @@
         %span.icon-bar
       %a.brand{:href => '/'} Gallery
       %ul.nav
-        %li{:class => @operation=='delete'&&@filter=='all' ? 'active' : ''}
-          %a{:href => '/delete'}Delete Photos
-        %li{:class => @operation=='delete'&&@filter=='selected' ? 'active' : ''}
-          %a{:href => '/delete/selected'}Deleted Photos
-        %li{:class => @operation=='censor'&&@filter=='all' ? 'active' : ''}
-          %a{:href => '/censor'}Censor Photos
-        %li{:class => @operation=='censor'&&@filter=='selected' ? 'active' : ''}
-          %a{:href => '/censor/selected'}Censored Photos
-        %li{:class => @operation=='publish'&&@filter=='all' ? 'active' : ''}
-          %a{:href => '/publish'}Publish Photos
-        %li{:class => @operation=='publish'&&@filter=='selected' ? 'active' : ''}
-          %a{:href => '/publish/selected'}Published Photos
+        %li{:class => url =~ /\/unsorted/ ? 'active' : ''}
+          %a{:href => '/unsorted'}Unsorted Photos
+        %li{:class => url =~ /\/deleted/ ? 'active' : ''}
+          %a{:href => '/deleted'}Deleted Photos
+        %li{:class => url =~ /\/censored/ ? 'active' : ''}
+          %a{:href => '/censored'}Censored Photos
+        %li{:class => url =~ /\/published/ ? 'active' : ''}
+          %a{:href => '/published'}Published Photos

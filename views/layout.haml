@@ -33,25 +33,7 @@
 
     %div= yield
 
-    #modal-gallery.modal.modal-gallery.hide.fade{ tabindex:'-1' }
-      .modal-header
-        %a.close{ data: { dismiss: "modal" } } &times;
-        %h3.modal-title
-      .modal-body
-        .modal-image
-      .modal-footer
-        %a.btn.btn-primary.modal-next
-          Next
-          %i.icon-arrow-right.icon-white
-        %a.btn.btn-info.modal-prev
-          Previous
-          %i.icon-arrow-left.icon-white
-        %a.btn.btn-success.modal-play.modal-slideshow{ data: { slideshow: 5000 } }
-          %i.icon-play.icon-white
-        %a.btn.btn-primary.modal-next
-          Download
-          %i.icon-arrow-right.icon-white
-
+    %div= haml :footer
 
     / Placed at the end of the document so the pages load faster
     %script{ :type => "text/javascript", :src =>"/bootstrap/js/jquery.js"}

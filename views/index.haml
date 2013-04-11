@@ -9,8 +9,7 @@
     #gallery{ data: { toggle: 'modal-gallery', target: '#modal-gallery' } }
       - for image in @images[@pagenum*99,99] || [] do
         .span4
-          %a{ href: '/photos/' + image, title: image, data: { gallery: 'gallery' } }
-            =haml :thumbnail, locals: { image: image }
+          =haml :thumbnail, locals: { image: image }
   .row
     .span12
       .pagination.pagination-centered
@@ -22,4 +21,23 @@
           %li
             %a{:href => "#{@prefix}/#{nextp}"}
               Next &rarr;
-  %div= haml :footer
+
+  #modal-gallery.modal.modal-gallery.hide.fade{ tabindex:'-1' }
+    .modal-header
+      %a.close{ data: { dismiss: "modal" } } &times;
+      %h3.modal-title
+    .modal-body
+      .modal-image
+    .modal-footer
+      %a.btn.btn-primary.modal-next
+        Next
+        %i.icon-arrow-right.icon-white
+      %a.btn.btn-info.modal-prev
+        Previous
+        %i.icon-arrow-left.icon-white
+      %a.btn.btn-success.modal-play.modal-slideshow{ data: { slideshow: 5000 } }
+        %i.icon-play.icon-white
+      %a.btn.btn-primary.modal-next
+        Download
+        %i.icon-arrow-right.icon-white
+

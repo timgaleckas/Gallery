@@ -43,9 +43,33 @@ end
 end
 
 get '/' do
-  haml :home
+  redirect '/unsorted'
 end
 
+get '/unsorted/?:page?' do |page|
+  @pagenum = page.to_i
+  @images = IMAGE_URLS - deleted_urls - censored_urls - published_urls
+  @prefix = "/unsorted"
+  haml :index
+end
+get '/deleted/?:page?' do |page|
+  @pagenum = page.to_i
+  @images = deleted_urls
+  @prefix = "/deleted"
+  haml :index
+end
+get '/censored/?:page?' do |page|
+  @pagenum = page.to_i
+  @images = censored_urls
+  @prefix = "/censored"
+  haml :index
+end
+get '/published/?:page?' do |page|
+  @pagenum = page.to_i
+  @images = published_urls
+  @prefix = "/published"
+  haml :index
+end
 get %r{/(delete|censor|publish)(?:/(all|selected))?(?:/([^\/?#]+)(?:\.|%2E)?([^\/?#]+)?)?$} do |operation, filter, page, format|
   @filter = filter || 'all'
   @images = case operation
