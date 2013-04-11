@@ -1,0 +1,7 @@
+redis-cli KEYS "*:resize*" | xargs redis-cli DEL
+redis-cli keys '*delete*' | cut -f 3 -d ':' | xargs -I xxxxx redis-cli hset 'pictures:selections' xxxxx 'delete'
+redis-cli keys '*censor*' | cut -f 3 -d ':' | xargs -I xxxxx redis-cli hset 'pictures:selections' xxxxx 'censor'
+redis-cli keys '*publish*' | cut -f 3 -d ':' | xargs -I xxxxx redis-cli hset 'pictures:selections' xxxxx 'publish'
+redis-cli KEYS "image:*" | xargs redis-cli DEL
+
+

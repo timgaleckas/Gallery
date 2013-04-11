@@ -5,6 +5,8 @@ gem "haml"
 gem "sass"
 
 gem "mini_magick"
+gem "exifr"
+gem "xmp"
 
 gem "redis"
 

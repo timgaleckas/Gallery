@@ -1,0 +1,9 @@
+.thumbnail
+  %img{ |
+    :class => "lazy#{ selected?(@operation, image) ? ' selected' : ''}", |
+    :src => "/img/placehold.gif", |
+    :data => {:original => '/resize/300x300/' + image, :select_url=> "/#{@operation}/select/#{image}" }, |
+    :width => 300, |
+    :title => image.gsub(/^photos./,'') |
+  } |
+  .title= image.gsub(/^photos./,'')

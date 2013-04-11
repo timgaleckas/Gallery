@@ -10,18 +10,34 @@ require 'pry'
 LOCAL_IMAGE_FILES=Dir.glob(File.dirname(__FILE__)+"/public/photos/Pictures/[12][0-9][0-9][0-9]/**/*.[jJmMPp3][pPoONng][gGvV4p]").sort.reverse
 IMAGE_URLS=LOCAL_IMAGE_FILES.map{|file|file.gsub(File.dirname(__FILE__)+"/public/photos/",'')}
 
+REDIS_PREFIX='pictures:'
+
 def redis
   @redis ||= Redis.new
 end
-helpers do
-def key_for_photo(operation,url)
-  "image:#{operation}:#{url}:selected"
+
+def deleted_urls
+  IMAGE_URLS & redis.hgetall(REDIS_PREFIX + 'selections').map{|a,b| a if b=='delete'}.compact
 end
 
-def photo_from_key(operation,key)
-  key.gsub("image:#{operation}:",'').gsub(':selected','')
+def censored_urls
+  IMAGE_URLS & redis.hgetall(REDIS_PREFIX + 'selections').map{|a,b| a if b=='censor'}.compact
 end
 
+def published_urls
+  IMAGE_URLS & redis.hgetall(REDIS_PREFIX + 'selections').map{|a,b| a if b=='publish'}.compact
+end
+
+def unselect(operation, photo)
+  if selected?(operation, photo)
+    redis.hdel REDIS_PREFIX + 'selections', photo
+  end
+end
+def select(operation, photo)
+  redis.hset REDIS_PREFIX + 'selections', photo, operation
+end
+def selected?(operation, photo)
+  redis.hget( REDIS_PREFIX + 'selections', photo ) == operation
 end
 
 get '/' do
@@ -36,30 +52,27 @@ get %r{/(delete|censor|publish)(?:/(all|selected))?(?:/([^\/?#]+)(?:\.|%2E)?([^\
               when 'all'
                 IMAGE_URLS
               when 'selected'
-                IMAGE_URLS & redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+                deleted_urls
               when 'not_selected'
-                IMAGE_URLS - redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+                IMAGE_URLS - deleted_urls
               end
             when 'censor'
-              censor_images = IMAGE_URLS - redis.keys(key_for_photo('delete', '*')).map{|key| photo_from_key('delete',key)}.sort.reverse
               case @filter
               when 'all'
-                censor_images
+                IMAGE_URLS - deleted_urls
               when 'selected'
-                censor_images & redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+                censored_urls
               when 'not_selected'
-                censor_images - redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+                IMAGE_URLS - deleted_urls - censored_urls
               end
             when 'publish'
-              censor_images = IMAGE_URLS - redis.keys(key_for_photo('delete', '*')).map{|key| photo_from_key('delete',key)}.sort.reverse
-              publish_images = censor_images - redis.keys(key_for_photo('censor', '*')).map{|key| photo_from_key('censor', key)}.sort.reverse
               case @filter
               when 'all'
-                publish_images
+                IMAGE_URLS - deleted_urls - censored_urls
               when 'selected'
-                publish_images & redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+                published_urls
               when 'not_selected'
-                publish_images - redis.keys(key_for_photo(operation, '*')).map{|key| photo_from_key(operation, key)}.sort.reverse
+                IMAGE_URLS - deleted_urls - censored_urls - published_urls
               end
             end
   @pagenum = page.to_i
@@ -70,13 +83,12 @@ end
 
 get "/:operation/select/*" do |operation, splat|
   photo = params[:splat][0].gsub(/\/resize\/[^\/]*\//,'')
-  key   = key_for_photo(operation,photo)
 
-  if redis.exists(key)
-    redis.del(key)
+  if selected?(operation, photo)
+    unselect(operation, photo)
     "removed:#{photo}"
   else
-    redis.set(key, true)
+    select(operation, photo)
     "added:#{photo}"
   end
 end
