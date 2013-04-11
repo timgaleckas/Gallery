@@ -12,6 +12,7 @@ IMAGE_URLS=LOCAL_IMAGE_FILES.map{|file|file.gsub(File.dirname(__FILE__)+"/public
 
 REDIS_PREFIX='pictures:'
 
+helpers do
 def redis
   @redis ||= Redis.new
 end
@@ -38,6 +39,7 @@ def select(operation, photo)
 end
 def selected?(operation, photo)
   redis.hget( REDIS_PREFIX + 'selections', photo ) == operation
+end
 end
 
 get '/' do
