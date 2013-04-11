@@ -47,63 +47,31 @@ get '/' do
 end
 
 get '/unsorted/?:page?' do |page|
-  @pagenum = page.to_i
+  start_index = [page.to_i, 0].max
   @images = IMAGE_URLS - deleted_urls - censored_urls - published_urls
-  @prefix = "/unsorted"
+  @images = @images[start_index, 99]
+  @previous_start_index = [start_index - 99, 0].max
   haml :index
 end
 get '/deleted/?:page?' do |page|
-  @pagenum = page.to_i
+  start_index = [page.to_i, 0].max
   @images = deleted_urls
-  @prefix = "/deleted"
+  @images = @images[start_index, 99]
+  @previous_start_index = [start_index - 99, 0].max
   haml :index
 end
 get '/censored/?:page?' do |page|
-  @pagenum = page.to_i
+  start_index = [page.to_i, 0].max
   @images = censored_urls
-  @prefix = "/censored"
+  @images = @images[start_index, 99]
+  @previous_start_index = [start_index - 99, 0].max
   haml :index
 end
 get '/published/?:page?' do |page|
-  @pagenum = page.to_i
+  start_index = [page.to_i, 0].max
   @images = published_urls
-  @prefix = "/published"
-  haml :index
-end
-get %r{/(delete|censor|publish)(?:/(all|selected))?(?:/([^\/?#]+)(?:\.|%2E)?([^\/?#]+)?)?$} do |operation, filter, page, format|
-  @filter = filter || 'all'
-  @images = case operation
-            when 'delete'
-              case @filter
-              when 'all'
-                IMAGE_URLS
-              when 'selected'
-                deleted_urls
-              when 'not_selected'
-                IMAGE_URLS - deleted_urls
-              end
-            when 'censor'
-              case @filter
-              when 'all'
-                IMAGE_URLS - deleted_urls
-              when 'selected'
-                censored_urls
-              when 'not_selected'
-                IMAGE_URLS - deleted_urls - censored_urls
-              end
-            when 'publish'
-              case @filter
-              when 'all'
-                IMAGE_URLS - deleted_urls - censored_urls
-              when 'selected'
-                published_urls
-              when 'not_selected'
-                IMAGE_URLS - deleted_urls - censored_urls - published_urls
-              end
-            end
-  @pagenum = page.to_i
-  @operation = operation
-  @prefix = "/#{operation}/#{filter}"
+  @images = @images[start_index, 99]
+  @previous_start_index = [start_index - 99, 0].max
   haml :index
 end
 

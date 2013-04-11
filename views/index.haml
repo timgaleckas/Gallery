@@ -1,25 +1,21 @@
-- prevp = @pagenum - 1
-- nextp = @pagenum + 1
-
 .container
   .row
     .span12
       #selected
   .row
     #gallery{ data: { toggle: 'modal-gallery', target: '#modal-gallery' } }
-      - for image in @images[@pagenum*99,99] || [] do
+      - for image in @images do
         .span4
           =haml :thumbnail, locals: { image: image }
   .row
     .span12
       .pagination.pagination-centered
         %ul
-          - if prevp != -1
-            %li
-              %a{:href => "#{@prefix}/#{prevp}"}
-                &larr; Prev
           %li
-            %a{:href => "#{@prefix}/#{nextp}"}
+            %a#previous-page{:href => url.gsub(/\/[0-9]*$/, "/#{@previous_start_index}")}
+              &larr; Prev
+          %li
+            %a#next-page{:href => '#' }
               Next &rarr;
 
   #modal-gallery.modal.modal-gallery.hide.fade{ tabindex:'-1' }
