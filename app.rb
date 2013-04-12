@@ -46,30 +46,18 @@ get '/' do
   redirect '/unsorted'
 end
 
-get '/unsorted/?:page?' do |page|
+get %r{/(?<filter>unsorted|deleted|censored|published)/?(?<page>[0-9]*)$} do |filter, page|
   start_index = [page.to_i, 0].max
-  @images = IMAGE_URLS - deleted_urls - censored_urls - published_urls
-  @images = @images[start_index, 99]
-  @previous_start_index = [start_index - 99, 0].max
-  haml :index
-end
-get '/deleted/?:page?' do |page|
-  start_index = [page.to_i, 0].max
-  @images = deleted_urls
-  @images = @images[start_index, 99]
-  @previous_start_index = [start_index - 99, 0].max
-  haml :index
-end
-get '/censored/?:page?' do |page|
-  start_index = [page.to_i, 0].max
-  @images = censored_urls
-  @images = @images[start_index, 99]
-  @previous_start_index = [start_index - 99, 0].max
-  haml :index
-end
-get '/published/?:page?' do |page|
-  start_index = [page.to_i, 0].max
-  @images = published_urls
+  @images = case filter
+            when 'unsorted'
+              IMAGE_URLS - deleted_urls - censored_urls - published_urls
+            when 'deleted'
+              deleted_urls
+            when 'censored'
+              censored_urls
+            when 'published'
+              published_urls
+            end
   @images = @images[start_index, 99]
   @previous_start_index = [start_index - 99, 0].max
   haml :index
@@ -87,18 +75,26 @@ get "/:operation/select/*" do |operation, splat|
   end
 end
 
-get '/resize/:dimensions/*' do |dimensions, url|
-  image = MiniMagick::Image.open("#{Dir.pwd}/public/photos/#{url}")
+get %r{(?:(?:/resize/([0-9]+x[0-9]+))|(?:/rotate/([0-9]+)))+/(.*)$} do |resize_dimensions,rotate_degrees,photo|
+  image = MiniMagick::Image.open("#{Dir.pwd}/public/photos/#{photo}")
 
   image.combine_options do |command|
     #
     # The box filter majorly decreases processing time without much
     # decrease in quality
     #
-    command.filter("box")
-    command.resize(dimensions)
+    if resize_dimensions
+      command.filter("box")
+      command.resize(resize_dimensions)
+    end
+    if rotate_degrees
+      command.rotate(rotate_degrees)
+    end
   end
-  dest = "#{Dir.pwd}/public/resize/#{dimensions}/#{url}"
+  dest = "#{Dir.pwd}/public/"
+  dest += "resize/#{resize_dimensions}/" if resize_dimensions
+  dest += "rotate/#{rotate_degrees}/" if rotate_degrees
+  dest += photo
   FileUtils.mkdir_p(File.dirname(dest))
   image.write(dest)
 

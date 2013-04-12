@@ -17,3 +17,7 @@ div.thumb-container div.header {
 .thumb-container .header {
   display: none
 }
+div.thumb-container {
+  width: 300px;
+  height: 300px;
+}
